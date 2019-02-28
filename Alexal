@@ -20,7 +20,10 @@ namespace hashcode2019
             int comparisonimageid = 0; // in reality this will be a counter 
             int comparisonimagenotags = 0;
             int comparisonimagetagod = 0;
-            string comparisonimageused = picture[3, comparisonimageid];
+
+            string comparisonimageusedarray= picture[3, comparisonimageid];
+            bool comparisonimageused = false;
+
             int totalnumberofimages = maxlength;
 
             int commontags = 0;
@@ -127,7 +130,7 @@ namespace hashcode2019
             if( V == true )
             {
                 //if its v then
-                picture(3, bestscoreid);
+                picture[3, bestscoreid] = "1";
                 //  do it all again but the id of best score id becomes used 
                 comparisonimagetagarray = new string[30];
                 currentimagetagarray = new string[30];
@@ -139,7 +142,7 @@ namespace hashcode2019
                 comparisonimageid = 0; // in reality this will be a counter 
                 comparisonimagenotags = 0;
                 comparisonimagetagod = 0;
-                comparisonimageused = picture(3, comparisonimageid);
+                comparisonimageusedarray = picture[3, comparisonimageid];
                 totalnumberofimages = maxlength;
 
                 commontags = 0;
@@ -254,6 +257,6 @@ namespace hashcode2019
 
 
     
-}
+
 
 
