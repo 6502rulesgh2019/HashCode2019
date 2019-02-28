@@ -8,20 +8,20 @@ namespace hashcode2019
 {
     class Program
     {
-        static void Imagecompare(int ID, int Notags, int tagsid ,  char orintateion , string[] tags )
+        static void Imagecompare(int ID, int Notags, int tagsid, char orintateion, string[] tags, string[] picture, int maxlength)
         {
             string[] comparisonimagetagarray = new string[30];
             string[] currentimagetagarray = new string[30];
 
-            int currentimageid = 1 ; // this will be called though array
+            int currentimageid = ID; // this will be called though array
             int currentimagetagid = 0; // in realtiy this will == passed objects first tag but for now
-            int currentimagenotags = 30;
+            int currentimagenotags = Notags;
 
-            int comparisonimageid = 2; // in reality this will be a counter 
-            int comparisonimagenotags = 20;
-            int comparisonimagetagod = 1;
-            bool comparisonimageused = false;
-            int totalnumberofimages = 800000;
+            int comparisonimageid = 0; // in reality this will be a counter 
+            int comparisonimagenotags = 0;
+            int comparisonimagetagod = 0;
+            bool comparisonimageused = picture(3, comparisonimageid);
+            int totalnumberofimages = maxlength;
 
             int commontags = 0;
             int comparrisonnotcurrenttag = 0;
@@ -33,62 +33,16 @@ namespace hashcode2019
             int bestscore = 0;
 
             bool tagfound = false;
+            bool V = false;
 
-            
-
-
-
-
-            for (int q = 0; q < 30; q++) // this gets all the tags in the current tag id and stores it in an array
+            if (V = false)
             {
-                string temp = "";
-                foreach (char item in tags[comparisonimageid])
+
+
+
+
+                for (int q = 0; q < 30; q++) // this gets all the tags in the current tag id and stores it in an array
                 {
-                    temp = "";
-                    if (Convert.ToString(item) == "32")
-                    {
-                        continue;
-                    }
-                    temp = temp + item;
-                }
-                currentimagetagarray[q] = temp;
-                // reads in each 3 digit and saves the temp until space 
-            }
-
-
-
-            for (int q = 0; q < 30; q++) // this gets all the tags in the comparrison tag id and stores it in an array
-            {
-                string temp = "";
-                foreach (char item in tags[comparisonimageid])
-                {
-                    temp = "";
-                    if (Convert.ToString(item) == "32")
-                    {
-                        continue;
-                    }
-                    temp = temp + item;
-                }
-                comparisonimagetagarray[q] = temp;
-                // reads in each 3 digti and saves the temp until space 
-            }
-
-
-
-
-            for (int i = 0; i < totalnumberofimages; i++)// compares all currents tags to all other images 
-            {
-                comparisonimageid = i;
-                if (comparisonimageid == "used" | currentimageid == comparisonimageid)  // if it 
-                {
-                    break; // or continue , wants it to skip
-                }
-
-
-                for (int q = 0; q < 30; q++) // this gets all the tags in the comparrison tag id and stores it in an array
-                {
-                    comparisonimageid = i;
-
                     string temp = "";
                     foreach (char item in tags[comparisonimageid])
                     {
@@ -99,16 +53,44 @@ namespace hashcode2019
                         }
                         temp = temp + item;
                     }
-                    comparisonimagetagarray[q] = temp;
-                    // reads in each 3 digti and saves the temp until space 
+                    currentimagetagarray[q] = temp; // reads in each 3 digit and saves the temp until space 
                 }
 
-                for (int j = 0; j < currentimagenotags; j++)// compares all current tags to all comparison tags
+
+
+                for (int i = 0; i < totalnumberofimages; i++)// compares all currents tags to all other images 
                 {
-                    currentimagetagid = j;
-                    for (int k = 0; k < comparisonimagenotags; k++)// compares current tags to all the other tags , so this chages its 
+                    comparisonimageid = i;
+                    if (comparisonimageused == false | currentimageid == comparisonimageid)  // if it 
                     {
-                        comparisonimagetagod = k;
+                        continue; // or continue , wants it to skip
+                    }
+
+
+                    for (int q = 0; q < 30; q++) // this gets all the tags in the comparrison tag id and stores it in an array
+                    {
+                        comparisonimageid = i;
+
+                        string temp = "";
+                        foreach (char item in tags[comparisonimageid])
+                        {
+                            temp = "";
+                            if (Convert.ToString(item) == "32")
+                            {
+                                continue;
+                            }
+                            temp = temp + item;
+                        }
+                        comparisonimagetagarray[q] = temp;
+                        // reads in each 3 digti and saves the temp until space 
+                    }
+
+                    for (int j = 0; j < currentimagenotags; j++)// compares all current tags to all comparison tags
+                    {
+                        currentimagetagid = j;
+                        for (int k = 0; k < comparisonimagenotags; k++)// compares current tags to all the other tags , so this chages its 
+                        {
+                            comparisonimagetagod = k;
 
                             if (currentimagetagarray[currentimagetagid] == comparisonimagetagarray[comparisonimagetagod]) // t23 == t34 for example 
                             {
@@ -117,46 +99,60 @@ namespace hashcode2019
                             }
                             else
                             {
-                            comparrisonnotcurrenttag += 1;
+                                comparrisonnotcurrenttag += 1;
                             }
 
-                        
-                    }
-                }
 
-                for (int j = 0; j < comparisonimagenotags; j++)// comparing all current tags against one comparrison for the third condidtion
-                    currentimagetagid = j;
+                        }
+                    }
+
+                    for (int j = 0; j < comparisonimagenotags; j++)// comparing all current tags against one comparrison for the third condidtion
+                        currentimagetagid = j;
                     for (int k = 0; k < currentimagenotags; k++)// compares current tags to all the other tags , so this chages its 
                     {
-                    currenthascomparrisontag = k;
+                        currenthascomparrisontag = k;
 
                         if (currentimagetagarray[currentimagetagid] != comparisonimagetagarray[comparisonimagetagod]) // t23 == t34 for example 
                         {
-                        currenthascomparrisontag += 1;
+                            currenthascomparrisontag += 1;
                         }
 
 
                     }
+                    totalscore = commontags + comparrisonnotcurrenttag + currenthascomparrisontag;
+                    if (bestscore < totalscore && tagfound == true)
+                    {
+                        bestscoreid = comparisonimageid;
+                    }
+                    tagfound = false;
                 }
 
-                if (bestscore < totalscore && tagfound == true)
-                {
-                    bestscoreid = comparisonimageid;
-                }
-                tagfound = false;
+
+
+
+
+                return (bestscoreid);
             }
+            else
+            {
+
+            }
+
+        }
+        
+
 
             // current image current tag == compared image 
             // for i = 0 to 
             // best id = id of lowest score 
             // best one has the smallest total
             //needs to return the id of the best one
-
-            return (bestscoreid);
+            
+            
         }
 
-        static void Main(string[] args)
-        {
-        }
-    }
+
+    
 }
+
+
