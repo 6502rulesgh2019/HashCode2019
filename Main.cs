@@ -6,6 +6,7 @@ using System.Windows;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MainHashCode
 {
@@ -23,7 +24,7 @@ namespace MainHashCode
             
             string append = "", currentLine;
 
-            StreamReader InputFile = new StreamReader(@"e_shiny_selfies.txt");
+            StreamReader InputFile = new StreamReader(@"b_lovely_landscapes.txt");
             while ((currentLine = InputFile.ReadLine()) != null)
             {
                 maxlength++;
@@ -54,22 +55,277 @@ namespace MainHashCode
                 count++;
             }
             InputFile.Close(); 
-            if (File.Exists(@"slideshow.txt"))
-            {
-                File.Delete(path);
-            }
-            StreamWriter tw = new StreamWriter(path, true);
-            CreateSlideShow(0, Picture[0,0], Picture[1,0],ref Picture,ref Tags, ref tw);
+            StreamWriter tw = new StreamWriter(@"slideshow.txt", true);
+            CreateSlideShow(0, "0", Picture[1,0],ref Picture,ref Tags, ref tw);
             tw.Close();
         }
 
-        static string ImageCompare(int ID,string tags, int noTags, char orientation)
+        static string Imagecompare(int ID, ref string[] tags, ref string[,] picture, int maxlength)
         {
-            return "Blah";
+            string[] comparisonimagetagarray = new string[30];
+            string[] currentimagetagarray = new string[30];
+
+            int currentimageid = ID; // this will be called though array
+            int currentimagetagid = 0; // in realtiy this will == passed objects first tag but for now
+            int currentimagenotags = Convert.ToInt32(picture[2, currentimageid]);
+
+            int comparisonimageid = 0; // in reality this will be a counter 
+            int comparisonimagenotags = 0;
+            int comparisonimagetagod = 0;
+
+            
+            bool comparisonimageused = false;
+
+            int totalnumberofimages = maxlength;
+
+            int commontags = 0;
+            int comparrisonnotcurrenttag = 0;
+            int currenthascomparrisontag = 0;
+            int totalscore = 0;
+
+
+            int vbestscoreid = 0;
+            int bestscoreid = 0;
+            string bestScoreString = "0";
+            int bestscore = 0;
+
+            bool tagfound = false;
+            bool V = false;
+
+            
+
+            if (picture[3, comparisonimageid] == "0")
+            {
+                comparisonimageused = false;
+            }
+            else
+            {
+                comparisonimageused = true;
+            }
+
+            if (picture[1, comparisonimageid] == "0")
+            {
+                V = false;
+            }
+            else
+            {
+                V = false;
+            }
+
+            for (int q = 0; q < currentimagenotags; q++) // this gets all the tags in the current tag id and stores it in an array
+            {
+                string temp = "";
+                foreach (char item in tags[comparisonimageid])
+                {
+                    temp = "";
+                    if (Convert.ToString(item) == "32")
+                    {
+                        continue;
+                    }
+                    temp = temp + item;
+                }
+                currentimagetagarray[q] = temp; // reads in each 3 digit and saves the temp until space 
+            }
+
+
+
+            for (int i = 0; i < totalnumberofimages; i++)// compares all currents tags to all other images 
+            {
+                comparisonimageid = i;
+                if (comparisonimageused == true || currentimageid == comparisonimageid)  // if it 
+                {
+                    continue; // or continue , wants it to skip
+                }
+
+
+                for (int q = 0; q < Convert.ToInt32(picture[2, comparisonimageid]); q++) // this gets all the tags in the comparrison tag id and stores it in an array
+                {
+                    comparisonimageid = q;
+
+                    string temp = "";
+                    foreach (char item in tags[comparisonimageid])
+                    {
+                        temp = "";
+                        if (Convert.ToString(item) == "32")
+                        {
+                            continue;
+                        }
+                        temp = temp + item;
+                    }
+                    comparisonimagetagarray[q] = temp;
+                    // reads in each 3 digti and saves the temp until space 
+                }
+
+                for (int j = 0; j < currentimagenotags; j++)// compares all current tags to all comparison tags
+                {
+                    currentimagetagid = j;
+                    for (int k = 0; k < comparisonimagenotags; k++)// compares current tags to all the other tags , so this chages its 
+                    {
+                        comparisonimagetagod = k;
+
+                        if (currentimagetagarray[currentimagetagid] == comparisonimagetagarray[comparisonimagetagod]) // t23 == t34 for example 
+                        {
+                            commontags += 0;
+                            tagfound = true;
+                        }
+                        else
+                        {
+                            comparrisonnotcurrenttag += 1;
+                        }
+
+
+                    }
+                }
+
+                for (int j = 0; j < comparisonimagenotags; j++)// comparing all current tags against one comparrison for the third condidtion
+                    currentimagetagid = j;
+                for (int k = 0; k < currentimagenotags; k++)// compares current tags to all the other tags , so this chages its 
+                {
+                    currenthascomparrisontag = k;
+
+                    if (currentimagetagarray[currentimagetagid] != comparisonimagetagarray[comparisonimagetagod]) // t23 == t34 for example 
+                    {
+                        currenthascomparrisontag += 1;
+                    }
+
+
+                }
+                totalscore = commontags + comparrisonnotcurrenttag + currenthascomparrisontag;
+                if (bestscore < totalscore && tagfound == true)
+                {
+                    bestscoreid = comparisonimageid;
+                }
+                tagfound = false;
+            }
+
+
+            if (V == true)
+            {
+                //if its v then
+                picture[3, bestscoreid] = "1";
+                //  do it all again but the id of best score id becomes used 
+                comparisonimagetagarray = new string[30];
+                currentimagetagarray = new string[30];
+
+                currentimageid = bestscoreid; // this will be called though array
+                currentimagetagid = 0; // in realtiy this will == passed objects first tag but for now
+                currentimagenotags = Convert.ToInt32(picture[2, currentimageid]);
+
+                comparisonimageid = 0; // in reality this will be a counter 
+                comparisonimagenotags = 0;
+                comparisonimagetagod = 0;
+                
+                totalnumberofimages = maxlength;
+
+                commontags = 0;
+                comparrisonnotcurrenttag = 0;
+                currenthascomparrisontag = 0;
+                totalscore = 0;
+
+
+                bestscoreid = 0;
+                bestscore = 0;
+
+                tagfound = false;
+                V = false;
+
+
+
+
+                for (int q = 0; q < currentimagenotags; q++) // this gets all the tags in the current tag id and stores it in an array
+                {
+                    string temp = "";
+                    foreach (char item in tags[comparisonimageid])
+                    {
+                        temp = "";
+                        if (Convert.ToString(item) == "32")
+                        {
+                            continue;
+                        }
+                        temp = temp + item;
+                    }
+                    currentimagetagarray[q] = temp; // reads in each 3 digit and saves the temp until space 
+                }
+
+
+
+                for (int i = 0; i < totalnumberofimages; i++)// compares all currents tags to all other images 
+                {
+                    comparisonimageid = i;
+                    if (comparisonimageused == true | currentimageid == comparisonimageid)  // if it 
+                    {
+                        continue; // or continue , wants it to skip
+                    }
+
+
+                    for (int q = 0; q < Convert.ToInt32(picture[2, comparisonimageid]); q++) // this gets all the tags in the comparrison tag id and stores it in an array
+                    {
+                        comparisonimageid = q;
+
+                        string temp = "";
+                        foreach (char item in tags[comparisonimageid])
+                        {
+                            temp = "";
+                            if (Convert.ToString(item) == "32")
+                            {
+                                continue;
+                            }
+                            temp = temp + item;
+                        }
+                        comparisonimagetagarray[q] = temp;
+                        // reads in each 3 digti and saves the temp until space 
+                    }
+
+                    for (int j = 0; j < currentimagenotags; j++)// compares all current tags to all comparison tags
+                    {
+                        currentimagetagid = j;
+                        for (int k = 0; k < comparisonimagenotags; k++)// compares current tags to all the other tags , so this chages its 
+                        {
+                            comparisonimagetagod = k;
+
+                            if (currentimagetagarray[currentimagetagid] == comparisonimagetagarray[comparisonimagetagod]) // t23 == t34 for example 
+                            {
+                                commontags += 0;
+                                tagfound = true;
+                            }
+                            else
+                            {
+                                comparrisonnotcurrenttag += 1;
+                            }
+
+
+                        }
+                    }
+
+                    for (int j = 0; j < comparisonimagenotags; j++)// comparing all current tags against one comparrison for the third condidtion
+                        currentimagetagid = j;
+                    for (int k = 0; k < currentimagenotags; k++)// compares current tags to all the other tags , so this chages its 
+                    {
+                        currenthascomparrisontag = k;
+
+                        if (currentimagetagarray[currentimagetagid] != comparisonimagetagarray[comparisonimagetagod]) // t23 == t34 for example 
+                        {
+                            currenthascomparrisontag += 1;
+                        }
+
+
+                    }
+                    totalscore = commontags + comparrisonnotcurrenttag + currenthascomparrisontag;
+                    if (vbestscoreid < totalscore && tagfound == true)
+                    {
+                        vbestscoreid = comparisonimageid;
+                    }
+                    tagfound = false;
+                }
+                bestScoreString = bestscoreid.ToString() + " " + vbestscoreid.ToString(); ;
+            }
+
+
+            return (bestScoreString);
         }
 
 
-        static void CreateSlideShow(int currentIteration, string ID,string Orientation,ref string[,] Picture,ref string[] tags, ref StreamWriter tw)
+    static void CreateSlideShow(int currentIteration, string ID,string Orientation,ref string[,] Picture,ref string[] tags, ref StreamWriter tw)
         {
             if(maxlength == currentIteration)
             {
@@ -77,7 +333,7 @@ namespace MainHashCode
             }
             else
             {
-                currentImage = ImageCompare(Convert.ToInt32(ID), tags[Convert.ToInt32(ID)], 0, Convert.ToChar(Orientation));
+                currentImage = Imagecompare(Convert.ToInt32(ID),ref tags,ref Picture, maxlength);
                 if(currentImage.Contains(" "))
                 {
                     string[] twoIDs = currentImage.Split(' ');
